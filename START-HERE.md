@@ -2,7 +2,7 @@
 
 1. Open this repository in Claude Code or Codex.
 2. Say: `Read SETUP.md and guide me through installing and onboarding a private client ICM workspace.`
-3. Choose an empty private destination outside the template repository. The agent handles the file setup and asks a few missing questions at a time.
+3. Choose a path for a new private folder outside the template repository. The installer creates it. The agent asks up to three missing questions at a time.
 4. Review and approve the exact client brief, then review and accept the generated workspace.
 5. Start at that client's CONTEXT.md for future work. Use its actual owners and source checks.
 

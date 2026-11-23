@@ -2,7 +2,7 @@
 
 Purpose: one source-sized business update and its actual publication coverage, without taking over a production workflow.
 
-Read the fact owner's current evidence and actual operational contract, then docs/UPDATES-AND-MONITORING.md. Inspect record-update command help. Supply the actual source file and selected surfaces; the command creates records/updates/<id>/record.json following record.template.json. Each selected surface names its owner and disposition. A surface can remain pending or blocked; not-required needs a reason and a decision source.
+Read the fact owner's current evidence, the catalog in offers/catalog.md and the selected surfaces in the existing update record. For a new record, run `python3 scripts/workbook.py record-update --help` from the client root. Supply the actual source file and selected surfaces. The command creates records/updates/<id>/record.json. Each surface names its receiving owner. A not-required disposition needs the reason and decision source.
 
 A verified-live surface needs an existing local owner evidence receipt following live-receipt.template.json, matching update ID, exact surface and owner, source hash, public URL, checked-at date, unexpired validity window and content-identity readback. The agent records the actual owner result in record.json without asking the person to hand-edit JSON. The receipt is evidence of an observed check, not permission to publish. A source change or expiry prevents an all-covered claim.
 

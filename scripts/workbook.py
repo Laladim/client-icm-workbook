@@ -13,8 +13,11 @@ from datetime import datetime, timezone
 from uuid import uuid4
 from urllib.parse import urlsplit, parse_qs
 
+from context_pages import (AREA_JOBS, PAGE_JOBS, ROUTES, SOURCE_MARK, area_page,
+                           brand_status, client_map, routes_for, worker_brief)
+
 ROOT = Path(__file__).resolve().parents[1]
-AREAS = ('company','brand','customer-evidence','offers','channels','performance','monitoring')
+AREAS = tuple(AREA_JOBS)
 BASIS = ('supplied-fact','evidence','interpretation','human-decision','unknown','not-applicable')
 ANSWERS = Path('onboarding/01_scope/output/answers.json')
 BRIEF = Path('onboarding/03_brief/output/client-brief.md')
@@ -22,28 +25,6 @@ BRIEF_STATE = Path('onboarding/03_brief/output/brief-state.json')
 BRIEF_APPROVAL = Path('onboarding/03_brief/output/brief-approval.json')
 MANIFEST = Path('onboarding/04_workspace/output/workspace-manifest.json')
 ACCEPTANCE = Path('onboarding/05_handoff/output/workspace-acceptance.json')
-TOPICS = {
-'business-sops':('company','company/operations.md'),
-'company-onboarding':('company','company/operations.md'),
-'staff-delegation':('company','company/operations.md'),
-'clients-profiles':('company','company/operations.md'),
-'web-social-links':('company','company/operations.md'),
-'sales-conversions':('performance','performance/measurement.md'),
-'brand-system':('brand','brand/CONTEXT.md'),
-'target-audience':('brand','brand/strategy/positioning.md'),
-'message-framework':('brand','brand/identity/message.md'),
-'platform-strategy':('channels','channels/strategy.md'),
-'demo-calls':('customer-evidence','customer-evidence/proof.md'),
-'newsletter-data':('channels','channels/CONTEXT.md'),
-'blog-data':('channels','channels/CONTEXT.md'),
-'youtube-data':('channels','channels/CONTEXT.md'),
-'linkedin-data':('channels','channels/CONTEXT.md'),
-'case-studies':('customer-evidence','customer-evidence/proof.md'),
-'testimonials':('customer-evidence','customer-evidence/proof.md'),
-'one-line-praise':('customer-evidence','customer-evidence/proof.md'),
-'offer-updates':('offers','offers/CONTEXT.md')}
-TOPICS.update({'weekly-report':('performance','performance/reporting.md'),'meeting-brief':('performance','performance/reporting.md'),'research-libraries':('customer-evidence','customer-evidence/research-libraries.md'),'cross-channel-study':('performance','performance/cross-channel-studies.md'),'backlinks-pr':('customer-evidence','customer-evidence/earned-media.md'),'api-help-docs':('offers','offers/catalog.md'),'competitor-positioning':('brand','brand/strategy/positioning.md'),'website-traffic':('performance','performance/measurement.md'),'search-console':('performance','performance/measurement.md'),'keyword-bank':('performance','performance/search-and-ai.md'),'ai-answer-bank':('performance','performance/search-and-ai.md'),'source-freshness':('monitoring','monitoring/CONTEXT.md')})
-
 class Problem(ValueError):
     pass
 
@@ -108,7 +89,8 @@ def init_client(args):
     shutil.copytree(ROOT/'docs',target/'docs')
     shutil.copytree(ROOT/'deploy',target/'deploy')
     (target/'scripts').mkdir(exist_ok=True)
-    shutil.copyfile(Path(__file__),target/'scripts/workbook.py')
+    for filename in ('workbook.py', 'context_pages.py'):
+        shutil.copyfile(ROOT/'scripts'/filename, target/'scripts'/filename)
     shutil.copyfile(ROOT/'_shared/questions.json',target/'_shared/questions.json')
     version=(ROOT/'VERSION').read_text().strip()
     jwrite(target/'client.json',{'schema_version':1,'id':args.id,'name':args.name.strip(),'mode':'local-only','template_version':version,'created_at':now()},False)
@@ -187,45 +169,118 @@ def approve_brief(root,args):
     identity(root);validate_brief(root);require(args.sha256==sha(root/BRIEF),'Displayed digest does not match the exact current brief.')
     require(args.by==answers(root)['answers']['engagement.approver']['value'],'Use the approver named in the client brief.')
     require(args.statement.strip() and args.statement.lower().strip() not in {'pending','silence','auto-approved','unknown'},'Record the actual explicit human approval statement.')
-    safe(args.statement);jwrite(root/BRIEF_APPROVAL,{'schema_version':1,'brief_sha256':sha(root/BRIEF),'answers_sha256':sha(root/ANSWERS),'approved_by':args.by,'statement':args.statement,'recorded_at':now()})
+    safe(args.statement);jwrite(root/BRIEF_APPROVAL,{'schema_version':1,'brief_sha256':sha(root/BRIEF),'answers_sha256':sha(root/ANSWERS),'approved_by':args.by,'statement':args.statement,'recorded_at':now(),'brand_decisions':brand_events(root)})
     print('Recorded exact-brief human approval. Next: build the local workspace.')
 
 def workspace_digest(root,manifest):
     refs={rel:sha(root/rel) for rel in manifest['files'] if (root/rel).is_file()}
     require(len(refs)==len(manifest['files']),'A generated workspace file is missing.')
     return canonical({'brief_approval_sha256':sha(root/BRIEF_APPROVAL),'files':refs})
-def build(root,args):
-    c=identity(root);validate_brief(root,True);a=answers(root);qs=applicable(root);destinations={q['destination'] for q in qs};files={}
-    if (root/MANIFEST).exists():
-        old=load(root/MANIFEST)
-        for rel,expected in old['files'].items():require((root/rel).is_file() and sha(root/rel)==expected,'A generated context file was edited: '+rel+'. Preserve it and reconcile the owner change before regenerating; no overwrite performed.')
-    for dest in sorted(destinations):
-        body=['# '+c['name']+': '+Path(dest).stem.replace('-',' '),'','Derived from the approved client brief. Basis and source references remain explicit; unknowns are not invented.','']
-        for q in qs:
-            if q['destination']==dest:body.append(section(q,a['answers'].get(q['id'])))
-        body+=['','Next: use the area CONTEXT.md and actual operational owner. This page carries context, not external-action authority.','']
-        if dest.startswith('channels/'):
-            body += ['', '## Required context before local drafting', '', 'Enter this channel owner first. Read [active brand](../brand/CONTEXT.md), [positioning](../brand/strategy/positioning.md), [voice](../brand/identity/character.md) and [message](../brand/identity/message.md). Use the exact client audience and declared channel reviewer. If a required audience/reviewer is unresolved, hold the dependent drafting or review action; do not substitute an example or old persona.', '', 'Product/service facts and public proof still come from their source owners. For an existing workflow, confirm that its actual worker loads this client context or receives an exact source-bound handoff. A map entry alone is not that proof.', '']
-        write(root/dest,'\n'.join(body));files[dest]=sha(root/dest)
-    for area in AREAS:
-        pages=sorted(p for p in destinations if p.startswith(area+'/'))
-        body=['# '+c['name']+': '+area,'','Purpose: one canonical area of the client umbrella. Read only the page needed for the current job.','',*['- ['+Path(p).stem.replace('-',' ')+']('+str(Path(p).relative_to(area)).replace('\\','/')+')' for p in pages],'','Do: inspect the supplied evidence and actual owner before acting. Existing workflows remain canonical; use docs/OWNER-BINDINGS.md to record their entry, input, output and gate.','', 'Write: context in these named pages; local artifacts under outputs/'+area+'/, or the explicitly bound existing owner output. Do not copy another client\'s data.','', 'Check: the approved brief, source freshness, exact proof/consent and the destination owner gate. The workspace is local-only. Unknown data is not a current fact.','', 'Next: the selected owner or explicit missing-source action. Live posting, sending, spending, account changes and production work require separately configured authority.','']
-        if area=='channels':body+=['Selected channels: '+(', '.join(selected(root)) or 'none')+'. An unselected channel has no production mandate.','', 'Each selected channel page is a context/manual local-draft capability, not an installed publisher or a complete production pipeline. A new production workflow needs its own owner, ordered stages, acceptance and explicit human gates.','']
-        if area=='offers':body+=['Use records/updates/ for source-to-online-coverage records. Assess documentation, website, existing content, sales/customer material and selected channel surfaces. An internal release plan does not prove current behavior or online coverage.','']
-        if area=='monitoring':body+=['monitoring/sources.json holds available source references. Its initial entries are unreviewed. Owners must supply current readback evidence; file existence and schedules do not prove freshness. Source review and publication are separate checks.','']
-        rel=area+'/CONTEXT.md';write(root/rel,'\n'.join(body));files[rel]=sha(root/rel)
-    # Source metadata is separate from accepted context. It starts honestly unreviewed.
-    if not (root/'monitoring/sources.json').exists():
-        jwrite(root/'monitoring/sources.json',load(root/'onboarding/02_evidence/output/source-register.json'))
-    body=['# '+c['name']+': client context map','','Purpose: one private client umbrella. Read the relevant area, then its page or actual existing owner. Skip unrelated client material.','','| Concern | Entry |','|---|---|']
-    for topic,(area,entry) in TOPICS.items():body.append('| '+topic.replace('-',' ')+' | ['+entry+']('+entry+') |')
-    body+=['','Onboarding state comes from scripts/workbook.py status. Human brief approval and workspace acceptance are separate gates. Local-only is the current mode. Tool/account access does not grant send, publish, spend or production authority.','','Sources: monitoring/sources.json. Update coverage: records/updates/. Raw data and generated outputs remain in this private workspace or their explicitly bound owner home. A source, consent or factual conflict blocks its dependent use; the assistant checks the owner before asking the person to repeat known information.','','Next: use the relevant owner for local work. Read docs/OWNER-BINDINGS.md and deploy handoff guidance before any live-integration proposal.','']
-    write(root/'CONTEXT.md','\n'.join(body));files['CONTEXT.md']=sha(root/'CONTEXT.md')
-    # Identity and shared instructions are also part of accepted workspace authority.
-    for rel in ['client.json','AGENTS.md','CLAUDE.md','_shared/context-contract.md']:
-        files[rel]=sha(root/rel)
-    manifest={'schema_version':1,'files':files,'brief_approval_sha256':sha(root/BRIEF_APPROVAL),'built_at':now()};manifest['workspace_sha256']=workspace_digest(root,manifest);jwrite(root/MANIFEST,manifest)
-    print('Generated seven-area local workspace. SHA-256:',manifest['workspace_sha256']);print('Run check, walk the routes, then stop for exact workspace acceptance.')
+def brand_events(root):
+    """Extend the existing receipt only when an explicit brand decision changes."""
+    previous = load(root / BRIEF_APPROVAL) if (root / BRIEF_APPROVAL).exists() else {}
+    events = list(previous.get('brand_decisions', []))
+    latest = {event['question']: event for event in events}
+    current = answers(root)['answers']
+    for question in applicable(root):
+        if question['area'] != 'brand':
+            continue
+        key = question['id']
+        record = current.get(key, {})
+        prior = latest.get(key)
+        decided = record.get('basis') == 'human-decision'
+        if not decided and (not prior or prior['wording'] is None):
+            continue
+        wording = record['value'] if decided else None
+        participant = record.get('supplied_by')
+        source = record.get('source')
+        if prior and (wording, participant, source) == (prior['wording'], prior['by'], prior['source']):
+            continue
+        events.append({'question': key, 'wording': wording, 'by': participant, 'source': source,
+                       'captured_at': record.get('recorded_at'), 'approved_at': now(),
+                       'brief_sha256': sha(root / BRIEF), 'replaces': prior['wording'] if prior else None,
+                       'basis': record.get('basis', 'unanswered')})
+    return events
+
+
+def decision_log(approval):
+    lines = ['# Brand decisions', '<!-- Generated from onboarding/03_brief/output/brief-approval.json. -->', '',
+             'Newest changes first. The [approval record](../onboarding/03_brief/output/brief-approval.json) retains the dated entries.', '']
+    for event in reversed(approval.get('brand_decisions', [])):
+        value = event['wording']
+        text = value if value is not None else 'Previous decision withdrawn. Current basis: ' + event['basis'] + '.'
+        lines += [f"## {event['approved_at']} | {event['question']}", '', text, '',
+                  'Recorded by ' + str(event.get('by') or 'Unspecified') + '.',
+                  'Source: ' + str(event['source'] or ('Interview answer ' + event['question'])) + '.',
+                  'Approved brief: ' + event['brief_sha256'] + '.', '']
+        if event.get('replaces') is not None:
+            lines += ['Replaces the prior wording:', '', event['replaces'], '']
+    if not approval.get('brand_decisions'):
+        lines.append('No explicit brand decision has been recorded in an approved brief.')
+    return '\n'.join(lines) + '\n'
+
+
+def reference_page(name, destination, questions, records, channels):
+    title = Path(destination).stem.replace('-', ' ')
+    parts = [f'# {name} | {title}', SOURCE_MARK, '']
+    if destination.startswith('brand/'):
+        parts.extend([brand_status(questions, records), ''])
+    if destination.startswith('channels/') and Path(destination).stem in channels:
+        parts.append(worker_brief(Path(destination).stem, records))
+    elif destination in PAGE_JOBS:
+        parts.extend([PAGE_JOBS[destination], ''])
+    missing = []
+    for question in questions:
+        key = question['id']
+        if key in records:
+            parts.append(section(question, records[key]))
+        else:
+            missing.append(key)
+    if missing:
+        parts.append('Still to collect: ' + ', '.join(missing) + '.\n')
+    return '\n'.join(parts)
+
+
+def build(root, args):
+    client = identity(root)
+    validate_brief(root, approved=True)
+    records = answers(root)['answers']
+    channels = selected(root)
+    by_destination = {}
+    for question in applicable(root):
+        by_destination.setdefault(question['destination'], []).append(question)
+
+    old = load(root / MANIFEST)['files'] if (root / MANIFEST).exists() else {}
+    for rel, expected in old.items():
+        require((root / rel).is_file() and sha(root / rel) == expected,
+                'A generated context file was edited: ' + rel + '. Preserve it and reconcile the change before regenerating.')
+
+    pages = {dest: reference_page(client['name'], dest, group, records, channels)
+             for dest, group in by_destination.items()}
+    pages.update({area + '/CONTEXT.md': area_page(area, by_destination) for area in AREAS})
+    pages['CONTEXT.md'] = client_map(client['name'], channels)
+    pages['brand/decisions.md'] = decision_log(load(root / BRIEF_APPROVAL))
+    # The previous approved worker may still be bookmarked. Keep its old bytes
+    # in history and replace the active instructions with the current scope.
+    for channel in bank(root)['channels']:
+        rel = 'channels/' + channel + '.md'
+        if rel in old and rel not in pages:
+            pages[rel] = f'# {channel} outside current scope\n{SOURCE_MARK}\n\nRead [channel scope](strategy.md) before starting work.\n'
+    for rel, body in pages.items():
+        write(root / rel, body)
+
+    inventory = root / 'monitoring/sources.json'
+    if not inventory.exists():
+        jwrite(inventory, load(root / 'onboarding/02_evidence/output/source-register.json'))
+    bound = ['client.json', 'AGENTS.md', 'CLAUDE.md', '_shared/context-contract.md']
+    files = {rel: sha(root / rel) for rel in [*pages, *bound]}
+    manifest = {'schema_version': 1, 'layout_version': 2, 'files': files,
+                'brief_approval_sha256': sha(root / BRIEF_APPROVAL), 'built_at': now()}
+    manifest['workspace_sha256'] = workspace_digest(root, manifest)
+    jwrite(root / MANIFEST, manifest)
+    print('Generated seven-area local workspace. SHA-256:', manifest['workspace_sha256'])
+    print('Run check, walk the routes, then stop for exact workspace acceptance.')
+
 
 def slug(value):
     require(re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',value) is not None,'Use a lowercase kebab-case record ID.')
@@ -354,11 +409,17 @@ def check(root,accepted=False,brief_only=False,require_current=False,require_onl
     m=load(root/MANIFEST);require(m.get('brief_approval_sha256')==sha(root/BRIEF_APPROVAL),'Brief approval changed since workspace build.')
     require(workspace_digest(root,m)==m.get('workspace_sha256'),'Generated context changed after build; review and rebind it before acceptance.')
     for area in AREAS:require((root/area/'CONTEXT.md').is_file(),'Missing area contract: '+area)
-    for topic,(_,entry) in TOPICS.items():require((root/entry).is_file(),'Missing actual concern route: '+topic)
+    current_routes = routes_for(selected(root))
+    for topic, (_, entry) in current_routes.items():
+        require((root / entry).is_file(), 'Missing concern route: ' + topic)
     require('@AGENTS.md' in (root/'CLAUDE.md').read_text(),'Claude entry must import the shared AGENTS authority.')
     for channel in selected(root):
         worker=root/'channels'/f'{channel}.md'
-        require(worker.is_file() and '../brand/strategy/positioning.md' in worker.read_text() and 'declared channel reviewer' in worker.read_text(),'Selected channel worker does not pull current audience/brand/reviewer: '+channel)
+        content = worker.read_text(encoding='utf-8') if worker.is_file() else ''
+        if m.get('layout_version', 1) >= 2:
+            require(worker_brief(channel, answers(root)['answers']) in content, 'Worker audience/reviewer differs from the approved answers: ' + channel)
+        else:
+            require('../brand/strategy/positioning.md' in content and 'declared channel reviewer' in content, 'Missing legacy worker context: ' + channel)
     if accepted:
         require((root/ACCEPTANCE).is_file(),'Workspace needs the named human acceptance of the displayed digest.')
         r=load(root/ACCEPTANCE);require(r.get('workspace_sha256')==m['workspace_sha256'] and r.get('brief_approval_sha256')==sha(root/BRIEF_APPROVAL) and r.get('accepted_by')==answers(root)['answers']['engagement.approver']['value'] and r.get('statement'),'Workspace acceptance is stale or incomplete.')
@@ -367,7 +428,7 @@ def check(root,accepted=False,brief_only=False,require_current=False,require_onl
     freshness=source_health(root)
     if require_current:require(not freshness,'; '.join(freshness))
     if require_online:require(count>0 and not gaps,'No complete assessed online update inventory: '+'; '.join(gaps))
-    return {'scope':'local client structure, shared entries, exact context/approval integrity and recorded evidence rules','status':'pass','accepted':accepted,'concern_routes':len(TOPICS),'areas':len(AREAS),'source_findings':freshness,'update_records':count,'online_coverage_gaps':gaps,'limits':'No current external data, audience validity, human identity, strategy success, installed automation or production authority is established by this check.'}
+    return {'scope':'local client structure, shared entries, exact context/approval integrity and recorded evidence rules','status':'pass','accepted':accepted,'concern_routes':len(ROUTES),'areas':len(AREAS),'source_findings':freshness,'update_records':count,'online_coverage_gaps':gaps,'limits':'No current external data, audience validity, human identity, strategy success, installed automation or production authority is established by this check.'}
 
 def accept_workspace(root,args):
     check(root);m=load(root/MANIFEST)
@@ -401,7 +462,7 @@ def main(argv=None):
     subs.add_parser('build',help='generate seven areas only after exact brief approval')
     q=subs.add_parser('check',help='check local setup; freshness and live coverage are separate opt-in requirements');q.add_argument('--brief-only',action='store_true');q.add_argument('--accepted',action='store_true');q.add_argument('--require-current',action='store_true');q.add_argument('--require-online',action='store_true')
     subs.add_parser('status',help='derive the next onboarding gate from files')
-    q=subs.add_parser('route',help='find the actual entry for a client concern');q.add_argument('--topic',choices=sorted(TOPICS),required=True)
+    q=subs.add_parser('route',help='find the actual entry for a client concern');q.add_argument('--topic',choices=sorted(ROUTES),required=True)
     q=subs.add_parser('register-source',help='register an actual source pointer without claiming current use');q.add_argument('--id',required=True);q.add_argument('--locator',required=True);q.add_argument('--owner',required=True);q.add_argument('--cadence',required=True);q.add_argument('--sensitivity',required=True);q.add_argument('--public-use',required=True)
     q=subs.add_parser('review-source',help='record a passing actual owner readback with source hash and validity');q.add_argument('--id',required=True);q.add_argument('--evidence',required=True);q.add_argument('--by',required=True)
     q=subs.add_parser('record-update',help='record one source-backed offer change and selected receiving surfaces');q.add_argument('--id',required=True);q.add_argument('--title',required=True);q.add_argument('--source',required=True);q.add_argument('--fact-owner',required=True);q.add_argument('--surfaces',required=True)
@@ -422,7 +483,7 @@ def main(argv=None):
         elif a.command=='study-pack':study_pack(root,a)
         elif a.command=='check':print(json.dumps(check(root,a.accepted,a.brief_only,a.require_current,a.require_online),indent=2))
         elif a.command=='route':
-            check(root,True);area,entry=TOPICS[a.topic];print(json.dumps({'topic':a.topic,'area':area,'entry':str(root/entry),'next':'Read this entry and actual owner; check evidence, consent and authority before use.'},indent=2))
+            check(root,True);area,entry=routes_for(selected(root))[a.topic];print(json.dumps({'topic':a.topic,'area':area,'entry':str(root/entry),'next':'Read this entry and actual owner; check evidence, consent and authority before use.'},indent=2))
         return 0
     except (Problem,OSError,KeyError,TypeError,json.JSONDecodeError) as e:
         print('CLIENT WORKBOOK CHECK FAILED: '+str(e),file=sys.stderr);return 1

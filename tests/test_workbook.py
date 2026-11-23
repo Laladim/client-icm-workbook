@@ -1,7 +1,6 @@
 """Real CLI fixtures. All clients, answers and approval statements here are fictional."""
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
-import importlib.util
 import json
 import os
 import shutil
@@ -12,6 +11,8 @@ import unittest
 
 REPO=Path(__file__).resolve().parents[1]
 SCRIPT=REPO/'scripts/workbook.py'
+sys.path.insert(0, str(SCRIPT.parent))
+from context_pages import ROUTES
 
 def cli(root,*args,ok=True):
     cmd=[sys.executable,str(SCRIPT)]
@@ -23,7 +24,7 @@ def cli(root,*args,ok=True):
 
 def jwrite(p,value):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(value,indent=2)+'\n')
 def read(p):return json.loads(p.read_text())
-def build_fixture(parent,cid,channels):
+def build_fixture(parent,cid,channels,custom=None):
     client=parent/cid
     cli(None,'init','--id',cid,'--name','Fictional '+cid,'--destination',str(client))
     source=parent/(cid+'-owner-export.csv');source.write_text('date,channel,visits\n2026-01-01,website,12\n2026-01-02,website,15\n')
@@ -41,6 +42,7 @@ def build_fixture(parent,cid,channels):
             elif q['id']=='sources.owners':value='Example Data Owner'
             elif q['type']=='channels':value=json.dumps(channels)
             elif q['type']=='list':value=json.dumps(['Manual local procedure; no existing integration or external write authority.'])
+            value = (custom or {}).get(q['id'], value)
             cli(client,'answer','--question',q['id'],'--value',value,'--basis','human-decision' if q['decision'] else 'supplied-fact','--by','Example Reviewer')
     cli(client,'brief');digest=read(client/'onboarding/03_brief/output/brief-state.json')['brief_sha256']
     cli(client,'approve-brief','--sha256',digest,'--by','Example Reviewer','--statement','I approve this fictional test brief.')
@@ -55,7 +57,12 @@ class WorkbookTests(unittest.TestCase):
         cls.temp=tempfile.TemporaryDirectory(prefix='client-icm-tests-')
         cls.base=Path(cls.temp.name)
         cls.accepted,cls.source=build_fixture(cls.base,'fictional-harbor',['website','social'])
-        cls.other,cls.other_source=build_fixture(cls.base,'fictional-maple',['blog','newsletter','youtube','linkedin'])
+        cls.other,cls.other_source=build_fixture(cls.base,'fictional-maple',['blog','newsletter','youtube','linkedin'], {
+            'audience.primary': 'Owners of independent bicycle shops.',
+            'channels.reviewers': 'Kit reviews bicycle shop drafts. Fleet operators have no assigned reviewer.',
+            'performance.recurring-reports': 'Mara owns the weekly report. Read the weekly sales export, write outputs/performance/weekly.md and ask the controller to review the totals.',
+            'evidence.libraries': 'Ivo owns the customer theme index. Refer to the consent-marked interview extracts and write an anonymized summary in outputs/customer-evidence/themes.md.',
+        })
         cls.third,cls.third_source=build_fixture(cls.base,'fictional-orchard',['paid','seo','email','events'])
     @classmethod
     def tearDownClass(cls):cls.temp.cleanup()
@@ -74,11 +81,50 @@ class WorkbookTests(unittest.TestCase):
         self.assertTrue((self.other/'channels/newsletter.md').exists())
         self.assertNotIn('fictional-maple',(self.accepted/'onboarding/03_brief/output/client-brief.md').read_text())
     def test_every_concern_routes_to_real_owner_context(self):
-        spec=importlib.util.spec_from_file_location('workbook_fixture',SCRIPT);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-        for topic in m.TOPICS:
+        for topic in ROUTES:
             r=json.loads(cli(self.root,'route','--topic',topic).stdout);self.assertTrue(Path(r['entry']).is_file())
     def test_selected_worker_reads_brand_and_reviewer(self):
-        s=(self.other/'channels/newsletter.md').read_text();self.assertIn('../brand/strategy/positioning.md',s);self.assertIn('declared channel reviewer',s)
+        s=(self.other/'channels/newsletter.md').read_text()
+        self.assertIn('Owners of independent bicycle shops.',s)
+        self.assertIn('Kit reviews bicycle shop drafts. Fleet operators have no assigned reviewer.',s)
+        self.assertIn('../brand/strategy/positioning.md',s)
+    def test_map_and_cli_reach_actual_work_pages(self):
+        router=(self.other/'CONTEXT.md').read_text()
+        for topic,request,entry,signals in [
+            ('blog-data','Write a blog','channels/blog.md',['Owners of independent bicycle shops.','Kit reviews','outputs/channels/']),
+            ('weekly-report','Prepare the weekly report','performance/reporting.md',['Mara','sales export','outputs/performance/weekly.md','controller']),
+            ('research-libraries','What do customers value?','customer-evidence/research-libraries.md',['Ivo','consent-marked','outputs/customer-evidence/themes.md']),
+            ('source-freshness','Is our data current?','monitoring/sources.json',['source-01','unreviewed','review_receipt']),
+        ]:
+            with self.subTest(topic=topic):
+                self.assertTrue(any(request in row and f']({entry})' in row for row in router.splitlines()))
+                response=json.loads(cli(self.other,'route','--topic',topic).stdout)
+                self.assertTrue(Path(response['entry']).samefile(self.other/entry))
+                page=(self.other/entry).read_text()
+                for signal in signals:self.assertIn(signal,page)
+        response=json.loads(cli(self.root,'route','--topic','blog-data').stdout)
+        self.assertTrue(Path(response['entry']).samefile(self.root/'channels/strategy.md'))
+    def test_revised_decisions_reach_the_worker_with_history(self):
+        def approve_and_build():
+            cli(self.root,'brief')
+            digest=read(self.root/'onboarding/03_brief/output/brief-state.json')['brief_sha256']
+            cli(self.root,'approve-brief','--sha256',digest,'--by','Example Reviewer','--statement','I approve this fictional revision.')
+            cli(self.root,'build')
+        cli(self.root,'answer','--question','audience.primary','--value','Fleet buyers','--by','Example Reviewer','--basis','human-decision','--source','Signed fictional audience revision')
+        cli(self.root,'answer','--question','channels.reviewers','--value','Unassigned','--by','Example Reviewer','--basis','unknown','--reason','Engagement contact must name the fleet reviewer.')
+        approve_and_build()
+        worker=(self.root/'channels/website.md').read_text()
+        self.assertIn('Fleet buyers',worker)
+        self.assertIn('Hold the dependent work',worker)
+        self.assertIn('Engagement contact must name the fleet reviewer.',worker)
+        log=(self.root/'brand/decisions.md').read_text()
+        self.assertIn('Signed fictional audience revision',log)
+        self.assertIn('Household customers',log)
+        self.assertIn('Replaces the prior wording',log)
+        self.assertIn('Example Reviewer',log)
+        cli(self.root,'check','--accepted',ok=False)
+        approve_and_build()
+        self.assertEqual(log,(self.root/'brand/decisions.md').read_text())
     def test_all_ten_channel_branches_build(self):
         for client,channels in [(self.accepted,['website','social']),(self.other,['blog','newsletter','youtube','linkedin']),(self.third,['paid','seo','email','events'])]:
             for channel in channels:self.assertTrue((client/'channels'/f'{channel}.md').is_file())

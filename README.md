@@ -17,6 +17,7 @@ The agent installs a private client folder outside this public repository, reads
 - A 97-question guided onboarding workbook covering business scope, SOPs, company onboarding, staff/delegation, existing customers, official website/social accounts, brand strategy/identity/marketing, audience, messages, platform strategy, demo calls, newsletter/blog/video/LinkedIn data, case studies, testimonials and one-line praise.
 - Additional questions for commercial outcomes, budgets, deliverables, approvals, offers and limitations, SEO/AI visibility, paid media, website conversion, accessibility, privacy, source freshness, sales feedback, maintenance and handover.
 - Seven organized client areas, with an ordered onboarding record and one answer-to-file map.
+- A writer can open a selected channel's page and find the recorded audience, reviewer and local draft destination. Brand references show which questions remain open, and a dated decision history preserves revised wording and its source.
 - Product/service change coverage that distinguishes internal updates, local assets and actual online evidence.
 - A portable Python standard-library installer/checker, explicit human approval hashes, meaningful refusal tests and fictional setup examples.
 - Shared Claude Code/Codex entries. No company-specific accounts, decisions, private data, global settings, connectors or publication authority are inherited.

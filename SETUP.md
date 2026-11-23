@@ -28,7 +28,7 @@ Stop here. Ask the named human to approve or revise this exact brief. A genuine 
 
 Only after the approved-brief check passes, run `build`. Answers populate company, brand, customer-evidence, offers, channels, performance and monitoring. Every question has an answer-to-file destination. Missing optional information stays labeled; tools and audience research are never invented. Only selected channel pages are generated. Brand strategy, identity and before/during/after marketing remain distinct.
 
-Register existing operational owners using docs/OWNER-BINDINGS.md. When no specialist workflow exists, each selected channel has a local draft-only manual contract and names the human publication owner as unresolved until supplied. Source records and capabilities are pointers, not automatic integrations. No newsletter-only, B2B-only, product-only, calendar-year or particular-platform assumption is inherited.
+Use docs/OWNER-BINDINGS.md when recording an existing workflow in the interview answers. Record the source, output and review gate. The selected channel worker displays the approved audience and reviewer, or the missing decision and next action. Each brand page shows its source status. The dated history of explicit brand decisions is in brand/decisions.md.
 
 Run `check`, then walk three realistic jobs: find the audience and approved message, prepare one local content brief using permitted evidence, and route a product/service change to affected online surfaces. Check an unavailable source and an unapproved publication attempt as refusals. Use actual output paths and readbacks. Do not start a real campaign just to test setup.
 
