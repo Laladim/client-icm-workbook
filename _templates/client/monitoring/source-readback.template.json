@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "source_id": "replace-with-registered-source-id",
+  "locator": "replace-with-exact-source-locator",
+  "owner": "replace-with-actual-source-owner",
+  "result": "unreviewed",
+  "checked_at": null,
+  "freshness_kind": "time-window",
+  "valid_until": null,
+  "source_sha256": null,
+  "review_note": "Record actual readback, scope, freshness window, supported use and limits. This blank template is not a pass."
+}

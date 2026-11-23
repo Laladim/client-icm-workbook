@@ -1,0 +1,1050 @@
+{
+  "schema_version": 1,
+  "channels": [
+    "blog",
+    "newsletter",
+    "youtube",
+    "linkedin",
+    "social",
+    "paid",
+    "website",
+    "seo",
+    "email",
+    "events"
+  ],
+  "groups": [
+    {
+      "id": "01-engagement",
+      "title": "Engagement, outcomes and scope",
+      "area": "company",
+      "channel": null,
+      "questions": [
+        {
+          "id": "company.description",
+          "prompt": "What does this client do, for whom, and in which markets?",
+          "why": "Establish the business before discussing formats.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.contact",
+          "prompt": "Who is the day-to-day client contact and who can make decisions?",
+          "why": "Avoid unclear delegation and repeated approval requests.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.services",
+          "prompt": "Which digital-marketing services are in scope, and which are excluded?",
+          "why": "Define the actual job and avoid unpriced work.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.success",
+          "prompt": "What business outcome matters most, what is its baseline, and what would success look like?",
+          "why": "Connect content to a meaningful business result.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.deadlines",
+          "prompt": "What launch dates, seasonal events, milestones and dependencies matter?",
+          "why": "Make delivery and campaign planning realistic.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.budget",
+          "prompt": "What budget or time capacity is available for content, tools, production and promotion?",
+          "why": "Keep the plan feasible; record confidential figures privately.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.deliverables",
+          "prompt": "What deliverables, turnaround, revision limits and acceptance criteria were agreed?",
+          "why": "Make the service agreement operational.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.approver",
+          "prompt": "Who approves the onboarding brief and workspace?",
+          "why": "Name a real human for decisions the agent cannot make.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.timezone",
+          "prompt": "What timezone, working days, meeting rhythm and response times should we use?",
+          "why": "Prevent scheduling and expectation errors.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        },
+        {
+          "id": "engagement.escalation",
+          "prompt": "Who handles urgent incidents, corrections, complaints and approval delays?",
+          "why": "Give uncertain or urgent work a safe next step.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "company/engagement.md"
+        }
+      ]
+    },
+    {
+      "id": "02-company",
+      "title": "Company knowledge and operating responsibilities",
+      "area": "company",
+      "channel": null,
+      "questions": [
+        {
+          "id": "company.onboarding",
+          "prompt": "Which company overview, onboarding deck, service agreement and business SOPs already exist?",
+          "why": "Reference current records before creating replacements.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/operations.md"
+        },
+        {
+          "id": "company.people",
+          "prompt": "Who does what across leadership, sales, product, support, marketing, design and technical work?",
+          "why": "Build a delegation and handoff map.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/operations.md"
+        },
+        {
+          "id": "company.customers",
+          "prompt": "Where is the existing client/customer list and what profile fields can marketing access?",
+          "why": "Learn segments while respecting privacy and permissions.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/operations.md"
+        },
+        {
+          "id": "company.accounts",
+          "prompt": "Which website, social accounts and listings are official, and who owns each?",
+          "why": "Prevent work on an abandoned or unofficial account.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "company/operations.md"
+        },
+        {
+          "id": "company.workflows",
+          "prompt": "Which existing workflows or agencies already own this work? List their entry files or procedures if known.",
+          "why": "Bind the current owner rather than creating a competing process.",
+          "required": true,
+          "decision": false,
+          "type": "list",
+          "destination": "company/operations.md"
+        },
+        {
+          "id": "company.handover",
+          "prompt": "What knowledge is undocumented, who can cover each role, and where do accepted changes get recorded?",
+          "why": "Make the workspace useful for another team member.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "company/operations.md"
+        }
+      ]
+    },
+    {
+      "id": "03-brand-strategy",
+      "title": "Brand strategy and target audience",
+      "area": "brand",
+      "channel": null,
+      "questions": [
+        {
+          "id": "brand.purpose",
+          "prompt": "Why does this business exist, beyond its products or services?",
+          "why": "Anchor the internal brand.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/internal-brand.md"
+        },
+        {
+          "id": "brand.vision",
+          "prompt": "What future is the business working toward, and which parts are aspirations?",
+          "why": "Keep future ambition separate from current capabilities.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/internal-brand.md"
+        },
+        {
+          "id": "brand.mission",
+          "prompt": "What does the business commit to doing now?",
+          "why": "Describe the present mission.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/internal-brand.md"
+        },
+        {
+          "id": "brand.values",
+          "prompt": "Which values should shape behavior, and what evidence shows them?",
+          "why": "Keep values concrete without inventing outcomes.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/internal-brand.md"
+        },
+        {
+          "id": "audience.primary",
+          "prompt": "Who is the primary audience, buyer, user and decision maker?",
+          "why": "Choose whom the work serves; do not guess from an example.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        },
+        {
+          "id": "audience.jobs",
+          "prompt": "What situation makes them seek help, what job are they trying to finish, and what blocks it?",
+          "why": "Find recognizable buying triggers and useful content.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        },
+        {
+          "id": "audience.research",
+          "prompt": "What do we know from customer research, and which fears, beliefs or segments are still hypotheses?",
+          "why": "Separate researched evidence from assumptions.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        },
+        {
+          "id": "audience.exclusions",
+          "prompt": "Who is a poor fit, and which markets, claims or use cases are out of scope?",
+          "why": "Avoid attracting the wrong demand.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        },
+        {
+          "id": "brand.competitors",
+          "prompt": "Which alternatives do customers consider, including doing nothing or doing it in-house?",
+          "why": "Frame competitive research without assuming weaknesses.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        },
+        {
+          "id": "brand.difference",
+          "prompt": "What difference can the client prove, and what should the audience remember?",
+          "why": "Ground positioning in evidence.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "brand/strategy/positioning.md"
+        }
+      ]
+    },
+    {
+      "id": "04-brand-identity",
+      "title": "Voice, message and visual identity",
+      "area": "brand",
+      "channel": null,
+      "questions": [
+        {
+          "id": "brand.character",
+          "prompt": "What personality or archetype fits the brand, and how should it behave?",
+          "why": "Translate character into writing choices without forcing a framework.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/character.md"
+        },
+        {
+          "id": "brand.voice",
+          "prompt": "How should the brand sound? Give accepted and rejected examples, terminology and style rules.",
+          "why": "Make voice reproducible.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/character.md"
+        },
+        {
+          "id": "brand.messages",
+          "prompt": "Which offer wording, core messages, promise, stories, name and tagline are already approved?",
+          "why": "Preserve actual approvals and leave undecided blocks open.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/message.md"
+        },
+        {
+          "id": "brand.claims",
+          "prompt": "Which phrases, comparisons, guarantees or claims need evidence or special review?",
+          "why": "Avoid making unapproved promises.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/message.md"
+        },
+        {
+          "id": "brand.visuals",
+          "prompt": "Where are current logos, colors, fonts, photography rules, templates and asset rights?",
+          "why": "Use the right design files without inventing a visual identity.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/visual.md"
+        },
+        {
+          "id": "brand.languages",
+          "prompt": "Which languages, reading level, accessibility and localization requirements apply?",
+          "why": "Make the content usable by the intended audience.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/identity/character.md"
+        }
+      ]
+    },
+    {
+      "id": "05-customer-journey",
+      "title": "Before, during and after the sale",
+      "area": "brand",
+      "channel": null,
+      "questions": [
+        {
+          "id": "journey.before",
+          "prompt": "How do new prospects find the business, become engaged, and recognize a need?",
+          "why": "Describe discovery and acquisition without confusing traffic with demand.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/before.md"
+        },
+        {
+          "id": "journey.capture",
+          "prompt": "What action captures a lead or starts a purchase, and what value is offered?",
+          "why": "Connect discovery to the next useful step.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/during.md"
+        },
+        {
+          "id": "journey.nurture",
+          "prompt": "What happens between first interest and purchase: follow-up, objections, nurture and handoffs?",
+          "why": "Plan support for real sales friction.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/during.md"
+        },
+        {
+          "id": "journey.conversion",
+          "prompt": "What is the conversion path, who owns it, and what defines a qualified lead or sale?",
+          "why": "Define the actual commercial event.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/during.md"
+        },
+        {
+          "id": "journey.after",
+          "prompt": "How are customers onboarded, supported, retained, expanded or invited to refer?",
+          "why": "Include customer experience, lifetime value and referrals.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/after.md"
+        },
+        {
+          "id": "journey.content",
+          "prompt": "What content is needed at each step, what CTA fits, and what should never be pushed prematurely?",
+          "why": "Map content to the journey rather than copying one format everywhere.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "brand/marketing/during.md"
+        }
+      ]
+    },
+    {
+      "id": "06-proof",
+      "title": "Customer evidence and proof permissions",
+      "area": "customer-evidence",
+      "channel": null,
+      "questions": [
+        {
+          "id": "evidence.calls",
+          "prompt": "Where are demo, discovery or sales calls, interviews, support questions and loss reasons?",
+          "why": "Find the actual language and questions behind stronger content.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.profiles",
+          "prompt": "Which customer profiles, use cases and buying-group details are current?",
+          "why": "Avoid mixing different audiences or prospect and customer states.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.case-studies",
+          "prompt": "Which case studies exist, what was the result, and where are the source and client approval?",
+          "why": "Keep exact evidence and publication consent connected.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.testimonials",
+          "prompt": "Which testimonials and one-line praises may be quoted, named or paraphrased, and under what permission?",
+          "why": "A proof format is not permission to invent or shorten a quote.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.results",
+          "prompt": "Which metrics, before/after claims or screenshots have reproducible evidence and an approved time window?",
+          "why": "Do not combine unrelated results or turn estimates into outcomes.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.gaps",
+          "prompt": "What proof is missing, who can supply it, and which public uses are blocked until then?",
+          "why": "Create an evidence request instead of filling gaps with plausible stories.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/proof.md"
+        },
+        {
+          "id": "evidence.libraries",
+          "prompt": "Which VOC/customer-value themes, demo-call-flow, industry/news, competitor and coverage research libraries exist, and who owns their accepted outputs?",
+          "why": "Route to rich research and proof stores, not only a product-facts checker.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/research-libraries.md"
+        },
+        {
+          "id": "evidence.earned-media",
+          "prompt": "Where is the record of backlinks, PR mentions, citations and peer shares, including date, exact URL, relevance, owner and any outreach limits?",
+          "why": "Observed links and mentions are evidence; a prospect list is not an earned placement.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "customer-evidence/earned-media.md"
+        }
+      ]
+    },
+    {
+      "id": "07-offers",
+      "title": "Products, services and release communication",
+      "area": "offers",
+      "channel": null,
+      "questions": [
+        {
+          "id": "offers.main",
+          "prompt": "What products or services are being marketed, what do they do today, and what are their limitations?",
+          "why": "Works for products, services, local businesses and nonprofit programs.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        },
+        {
+          "id": "offers.sources",
+          "prompt": "Who owns product/service truth, and where are current API docs when relevant, help center, FAQs, release notes and approved offer details?",
+          "why": "Marketing copy is a consumer of product truth, not its proof.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        },
+        {
+          "id": "offers.changes",
+          "prompt": "How will we learn about releases, policy changes, discontinued offers, incidents or corrections?",
+          "why": "Prevent important business updates from remaining internal.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        },
+        {
+          "id": "offers.surfaces",
+          "prompt": "Which online and sales surfaces need an update for each change, and who owns them?",
+          "why": "Track documentation, website, email, social, sales and existing content coverage.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        },
+        {
+          "id": "offers.pricing",
+          "prompt": "May prices, discounts, guarantees or competitor costs appear publicly? What approval is needed?",
+          "why": "Public pricing policies differ by client.",
+          "required": false,
+          "decision": true,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        },
+        {
+          "id": "offers.launches",
+          "prompt": "What embargoes, launch readiness checks, rollback conditions or announcement sequence apply?",
+          "why": "An internal plan or feature flag is not proof of a released capability.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "offers/catalog.md"
+        }
+      ]
+    },
+    {
+      "id": "08-channels",
+      "title": "Channel scope and platform strategy",
+      "area": "channels",
+      "channel": null,
+      "questions": [
+        {
+          "id": "channels.active",
+          "prompt": "Which channels are actually in scope? Use channel IDs from the list; an empty list means no channel production.",
+          "why": "Enable relevant branches rather than assuming every client needs every platform.",
+          "required": true,
+          "decision": true,
+          "type": "channels",
+          "destination": "channels/strategy.md"
+        },
+        {
+          "id": "channels.roles",
+          "prompt": "For each selected channel, what audience, job, format, CTA and conversion does it serve?",
+          "why": "Give each platform a deliberate role.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/strategy.md"
+        },
+        {
+          "id": "channels.cadence",
+          "prompt": "What cadence and production capacity are realistic, and who creates each asset?",
+          "why": "Avoid promising volume without people or inputs.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/strategy.md"
+        },
+        {
+          "id": "channels.inventory",
+          "prompt": "Where are existing blog, newsletter, YouTube, LinkedIn and other selected-channel assets, inventories, editorial calendars and performance exports?",
+          "why": "Start from available material before making more.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/strategy.md"
+        },
+        {
+          "id": "channels.repurpose",
+          "prompt": "Which source assets may be repurposed, who owns the original, and which derivatives are required or optional?",
+          "why": "Preserve source identity and avoid duplicating ownership.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/strategy.md"
+        },
+        {
+          "id": "channels.reviewers",
+          "prompt": "Who reviews each selected channel for audience fit, factual accuracy and final acceptance, and what happens when a reviewer is missing?",
+          "why": "A new audience must reach the actual worker and reviewer; never silently fall back to an old persona.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "channels/strategy.md"
+        }
+      ]
+    },
+    {
+      "id": "09-blog",
+      "title": "Blog branch",
+      "area": "channels",
+      "channel": "blog",
+      "questions": [
+        {
+          "id": "channels.blog.intent",
+          "prompt": "Which search intents, topic clusters, original expertise and existing pages should the blog support?",
+          "why": "Build an evidence-led editorial brief.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/blog.md"
+        },
+        {
+          "id": "channels.blog.workflow",
+          "prompt": "Who owns research, drafting, CMS updates, technical SEO, site QA and publication?",
+          "why": "Preserve writing and technical ownership boundaries.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/blog.md"
+        }
+      ]
+    },
+    {
+      "id": "09-newsletter",
+      "title": "Newsletter branch",
+      "area": "channels",
+      "channel": "newsletter",
+      "questions": [
+        {
+          "id": "channels.newsletter.promise",
+          "prompt": "Who subscribes, what recurring promise do they receive, and what evidence supports each edition?",
+          "why": "Define a publication rather than an email slot.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/newsletter.md"
+        },
+        {
+          "id": "channels.newsletter.permission",
+          "prompt": "Where are subscriber consent, suppression lists, sender setup, review and send authority documented?",
+          "why": "Keep audience permission and publishing authority explicit.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/newsletter.md"
+        }
+      ]
+    },
+    {
+      "id": "09-youtube",
+      "title": "Youtube branch",
+      "area": "channels",
+      "channel": "youtube",
+      "questions": [
+        {
+          "id": "channels.youtube.production",
+          "prompt": "Which video formats, presenters, footage rights, script review, editing, captions and thumbnails are needed?",
+          "why": "A script is not a finished or published video.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/youtube.md"
+        },
+        {
+          "id": "channels.youtube.analytics",
+          "prompt": "Where are actual video URLs and native/exported views, retention, CTR and conversion data?",
+          "why": "Separate script delivery from platform performance.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/youtube.md"
+        }
+      ]
+    },
+    {
+      "id": "09-linkedin",
+      "title": "Linkedin branch",
+      "area": "channels",
+      "channel": "linkedin",
+      "questions": [
+        {
+          "id": "channels.linkedin.identity",
+          "prompt": "Is this a company page, executive profile or employee program, and who owns posting?",
+          "why": "Separate company and personal-brand authority.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/linkedin.md"
+        },
+        {
+          "id": "channels.linkedin.measurement",
+          "prompt": "Which post formats and native performance exports will be tracked?",
+          "why": "A carousel PDF is not proof of a published post.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/linkedin.md"
+        }
+      ]
+    },
+    {
+      "id": "09-social",
+      "title": "Social branch",
+      "area": "channels",
+      "channel": "social",
+      "questions": [
+        {
+          "id": "channels.social.platforms",
+          "prompt": "Which social platforms, accounts, audience/community rules and content formats are in scope?",
+          "why": "Adapt to actual platforms rather than copying one schedule.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/social.md"
+        },
+        {
+          "id": "channels.social.moderation",
+          "prompt": "Who handles DMs, comments, complaints, escalation and response times?",
+          "why": "Content production alone does not cover community management.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/social.md"
+        }
+      ]
+    },
+    {
+      "id": "09-paid",
+      "title": "Paid branch",
+      "area": "channels",
+      "channel": "paid",
+      "questions": [
+        {
+          "id": "channels.paid.scope",
+          "prompt": "Which ad platforms, budgets, agency responsibilities, approvals and spending caps apply?",
+          "why": "Do not infer spend or campaign-change authority.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/paid.md"
+        },
+        {
+          "id": "channels.paid.tracking",
+          "prompt": "What are the offer, landing page, conversion event, tracking, creative tests and stop rules?",
+          "why": "Tie paid activity to a measurable and bounded experiment.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/paid.md"
+        }
+      ]
+    },
+    {
+      "id": "09-website",
+      "title": "Website branch",
+      "area": "channels",
+      "channel": "website",
+      "questions": [
+        {
+          "id": "channels.website.ownership",
+          "prompt": "Who owns website design, CMS, code, hosting and deployment, and what pages are protected?",
+          "why": "Prevent a content request from changing infrastructure.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/website.md"
+        },
+        {
+          "id": "channels.website.conversion",
+          "prompt": "Which forms, booking paths, checkout flows, accessibility and mobile journeys need checking?",
+          "why": "Test the actual customer journey after authorized changes.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/website.md"
+        }
+      ]
+    },
+    {
+      "id": "09-seo",
+      "title": "Seo branch",
+      "area": "channels",
+      "channel": "seo",
+      "questions": [
+        {
+          "id": "channels.seo.baseline",
+          "prompt": "What are the search, AI-answer and local-listing goals, baselines, query/page data and technical constraints?",
+          "why": "Separate discovery hypotheses from observed results.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/seo.md"
+        },
+        {
+          "id": "channels.seo.outreach",
+          "prompt": "Who owns citations, backlinks, directories, PR and outreach, and what communication is authorized?",
+          "why": "Access to a contact list is not outreach permission.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/seo.md"
+        }
+      ]
+    },
+    {
+      "id": "09-email",
+      "title": "Email branch",
+      "area": "channels",
+      "channel": "email",
+      "questions": [
+        {
+          "id": "channels.email.lifecycle",
+          "prompt": "Which lifecycle or sales emails are in scope, what triggers them, and who owns consent and sending?",
+          "why": "Separate one-off copy from live automations.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/email.md"
+        }
+      ]
+    },
+    {
+      "id": "09-events",
+      "title": "Events branch",
+      "area": "channels",
+      "channel": "events",
+      "questions": [
+        {
+          "id": "channels.events.coverage",
+          "prompt": "Which events, partnerships or PR programs need preparation, capture rights, follow-up and repurposing?",
+          "why": "Connect event activity to evidence and follow-up.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "channels/events.md"
+        }
+      ]
+    },
+    {
+      "id": "10-performance",
+      "title": "Measurement, sales feedback and reporting",
+      "area": "performance",
+      "channel": null,
+      "questions": [
+        {
+          "id": "performance.kpis",
+          "prompt": "Which business outcomes, leading indicators and quality measures will be reported?",
+          "why": "Separate traffic, engagement, qualified demand, sales and retention.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.sources",
+          "prompt": "Where are website analytics (for example GA4), search-console data (for example Google Search Console), CRM, sales-stage history and channel exports? Who owns definitions, access and refresh?",
+          "why": "Register actual sources rather than plausible connectors.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.attribution",
+          "prompt": "How are conversions defined, deduplicated and attributed, and what cannot be proven?",
+          "why": "Do not claim content caused revenue from correlation alone.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.windows",
+          "prompt": "What reporting windows, baselines, lag and comparison rules apply?",
+          "why": "Avoid misleading period comparisons.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.feedback",
+          "prompt": "How will sales and customer success report lead quality, objections, wins and losses?",
+          "why": "Close the loop from content to commercial learning.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.reporting",
+          "prompt": "Who receives which report, how often, and what decision should follow?",
+          "why": "Make reporting useful rather than another dashboard.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/measurement.md"
+        },
+        {
+          "id": "performance.recurring-reports",
+          "prompt": "Which recurring status reports and private meeting briefs are required, for whom, with what privacy, source, owner and review gate?",
+          "why": "A sales/conversion dashboard does not replace a written client report or meeting brief.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/reporting.md"
+        },
+        {
+          "id": "performance.dictionary",
+          "prompt": "Define the metrics we will compare across channels, including units, denominators, attribution, timezone, windows, lag and source-specific limits.",
+          "why": "Views, opens, clicks, qualified leads and sales need explicit definitions before cross-channel study.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/metrics-dictionary.md"
+        },
+        {
+          "id": "performance.studies",
+          "prompt": "What bounded cross-channel question should we study, for which dates and cohort, and which owner outputs can support it?",
+          "why": "Create a small cited evidence pack rather than searching every client file or copying a data warehouse.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/cross-channel-studies.md"
+        },
+        {
+          "id": "performance.keywords",
+          "prompt": "Where is the keyword bank, with query intent, audience, geography, volume/rank source, observed date and page/topic mapping?",
+          "why": "Keep measured query data separate from keyword ideas.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/search-and-ai.md"
+        },
+        {
+          "id": "performance.ai-answers",
+          "prompt": "Where is the ChatGPT/AI-answer prompt and answer bank, with exact prompt, model/product, run date, locale, answer, cited URLs and repeat-check rule?",
+          "why": "One model answer is an observation under stated conditions, not universal visibility.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "performance/search-and-ai.md"
+        }
+      ]
+    },
+    {
+      "id": "11-access",
+      "title": "Access, privacy, sources and authority",
+      "area": "monitoring",
+      "channel": null,
+      "questions": [
+        {
+          "id": "access.tools",
+          "prompt": "Which tools and accounts exist, what read/write scopes are granted, and where are manual alternatives?",
+          "why": "Installed tools and subscriptions do not prove access.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "access.secrets",
+          "prompt": "How will secure invitations and credentials be handled outside this workspace?",
+          "why": "Never ask for passwords, API keys, cookies or tokens in chat or Git.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "privacy.rules",
+          "prompt": "Which data is confidential, restricted, consent-bound or subject to retention and deletion rules?",
+          "why": "Keep client and customer material inside its authorized private boundary.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "authority.actions",
+          "prompt": "What may the assistant do locally, what needs review, and who alone can publish, send, spend or change production?",
+          "why": "Record desired delegation without granting it through the template.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "sources.locations",
+          "prompt": "List the source files, documents, datasets and relevant public pages already available.",
+          "why": "Read supplied context first and ask only for missing information.",
+          "required": true,
+          "decision": false,
+          "type": "list",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "sources.owners",
+          "prompt": "Who maintains each source, how fresh must it be, and what is the evidence of its last successful refresh?",
+          "why": "A scheduled job or file timestamp is not a successful refresh.",
+          "required": true,
+          "decision": false,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "sources.conflicts",
+          "prompt": "What is the source priority when files disagree, and which unresolved questions need an owner decision?",
+          "why": "Keep conflicts visible instead of choosing the convenient copy.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "authority.regulated",
+          "prompt": "Which claims, regulated topics, endorsements, licenses, accessibility or legal reviews require a specialist?",
+          "why": "Route actual requirements to an appropriate reviewer; do not invent jurisdictional advice.",
+          "required": false,
+          "decision": false,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "authority.pilot",
+          "prompt": "What one small, reversible task can prove the workspace and handoffs work before live integration?",
+          "why": "Separate setup checks from production reliability.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        },
+        {
+          "id": "authority.handoff",
+          "prompt": "Who maintains this workspace, reviews changes and receives the handover?",
+          "why": "Give maintenance and offboarding an owner.",
+          "required": true,
+          "decision": true,
+          "type": "text",
+          "destination": "monitoring/authority.md"
+        }
+      ]
+    }
+  ]
+}

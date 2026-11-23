@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "replace-with-update-id",
+  "title": "Unreviewed change",
+  "source": "replace-with-actual-source-file",
+  "fact_owner": "unassigned",
+  "surfaces": [
+    {
+      "name": "replace-with-selected-surface",
+      "owner": "unassigned",
+      "state": "needs-review",
+      "receipt": null
+    }
+  ]
+}

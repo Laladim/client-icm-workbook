@@ -1,0 +1,11 @@
+# Private workspace: no public Git remote is created by this workbook.
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+*.pem
+*.key
+*.p12
+private/
+outputs/

@@ -1,0 +1,22 @@
+{
+  "question": "Replace with one bounded study question",
+  "window": {
+    "start": null,
+    "end": null,
+    "timezone": null
+  },
+  "sources": [
+    {
+      "channel": null,
+      "metric": null,
+      "definition": null,
+      "unit": null,
+      "window_start": null,
+      "window_end": null,
+      "source_file": null,
+      "locator": null,
+      "owner": null,
+      "limits": null
+    }
+  ]
+}

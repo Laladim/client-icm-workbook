@@ -1,0 +1,11 @@
+# Updates and source freshness
+
+A business change enters an update record with its source, date, fact owner, release/approval evidence, affected content, selected surfaces and receiving owner. Works for a new feature, a changed service, a discontinued offer, a policy correction or a campaign update.
+
+Follow source owner verification, then the existing content/site owner. Typical surfaces to assess include product/service documentation and FAQs, website/landing pages, existing blog revisions, release/news/help pages, customer/sales enablement and selected email/social/video. Do not require every channel for every change: a not-required disposition needs a reason and decision source.
+
+A live surface needs exact URL, checked-at date, owner evidence, content identity and a source fingerprint. Approval, source validity and live verification are separate. Never declare a rollout complete from an internal announcement, script handoff, local artifact or planned schedule. A changed source or expired evidence reopens the dependent check, not automatic public rewriting.
+
+The installed workspace's monitoring/sources.json starts with interview source pointers labeled unreviewed. Source owners must provide current successful readbacks before claiming data is current. Do not substitute file timestamps, connector installation or a scheduler definition. Reading public sources is different from publishing or contacting someone.
+
+For an actual update, inspect record-update --help, prepare the selected surfaces from records/updates/surfaces.template.json, and use record-update to create records/updates/<id>/record.json. The record pins the source bytes and begins needs-review. The receiving owner performs its own approved work. Preserve its actual live readback using records/updates/live-readback.template.json, then update only that surface's state and receipt reference in record.json. The agent handles this JSON; the person does not need to edit it. Each live receipt must match the update, exact surface, receiving owner, source hash, successful HTTPS response, expected content, observed date and validity window. Use check --require-online to expose pending or unsupported claims. A not-required surface needs its reason and actual decision source. No network publisher, account connection, paid call or scheduler exists in this workbook.

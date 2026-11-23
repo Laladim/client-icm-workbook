@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "update_id": "Replace with actual update ID",
+  "surface": "Replace with exact surface name",
+  "owner": "Replace with exact receiving owner",
+  "source_sha256": null,
+  "public_url": null,
+  "status_code": null,
+  "content_sha256": null,
+  "expected_content_present": false,
+  "checked_at": null,
+  "valid_until": null,
+  "scope": "Blank template only. Fill from actual authorized owner publication and public readback; never treat this template as evidence."
+}
