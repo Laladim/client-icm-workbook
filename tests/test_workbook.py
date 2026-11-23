@@ -146,6 +146,6 @@ class WorkbookTests(unittest.TestCase):
     def test_bounded_study_pack_keeps_metric_window_and_source(self):
         local,evidence=self.review_source();manifest=self.root/'private/study-input.json'
         jwrite(manifest,{'question':'Which website evidence is available for this fictional window?','window':{'start':'2026-01-01','end':'2026-01-02','timezone':'UTC'},'sources':[{'channel':'website','metric':'visits','definition':'Count of recorded visits; not unique prospects, qualified leads or revenue.','unit':'visits','window_start':'2026-01-01','window_end':'2026-01-02','source_file':str(local),'locator':'rows 2-3, visits column','owner':'Example Data Owner','limits':'Two-row fictional fixture. No causal business conclusion.'}]})
-        cli(self.root,'study-pack','--id','first-study','--manifest',str(manifest));p=self.root/'outputs/studies/first-study/manifest.json';r=read(p);self.assertEqual(r['sources'][0]['unit'],'visits');self.assertEqual(Path(r['sources'][0]['source_file']),local);self.assertTrue((p.parent/'STUDY.md').is_file())
+        cli(self.root,'study-pack','--id','first-study','--manifest',str(manifest));p=self.root/'outputs/studies/first-study/manifest.json';r=read(p);self.assertEqual(r['sources'][0]['unit'],'visits');self.assertTrue(Path(r['sources'][0]['source_file']).samefile(local));self.assertTrue((p.parent/'STUDY.md').is_file())
 
 if __name__=='__main__':unittest.main(verbosity=2)
